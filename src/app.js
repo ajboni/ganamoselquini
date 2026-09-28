@@ -95,7 +95,13 @@ function NumeroChip({ n, jugada }) {
 
 function SorteoCard({ item, jugada }) {
   const { sorteo, tier, mejor, modalidades, extra } = item;
-  const nums = mejor?.numeros || [];
+  const [abierto, setAbierto] = useState(false);
+
+  const principal =
+    mejor ||
+    modalidades.reduce((best, m) => (!best || m.aciertos > best.aciertos ? m : best), null);
+  const nums = principal ? principal.numeros || sorteo[principal.key] || [] : [];
+
   return html`
     <article class=${'card ' + TIERS[tier].clase}>
       <header class="card-head">
@@ -106,11 +112,12 @@ function SorteoCard({ item, jugada }) {
         <span class=${'badge ' + TIERS[tier].clase}>${etiquetaTier(item)}</span>
       </header>
 
+      <div class="nums">
+        ${nums.map((n) => html`<${NumeroChip} n=${n} jugada=${jugada} />`)}
+      </div>
+
       ${tier > 0
-        ? html`<div class="nums">
-            ${nums.map((n) => html`<${NumeroChip} n=${n} jugada=${jugada} />`)}
-          </div>
-          <p class="mejor">${mejor.label}: ${mejor.aciertos} aciertos</p>`
+        ? html`<p class="mejor">${principal.label}: ${principal.aciertos} aciertos</p>`
         : html`<p class="sin-premio">No ganaste en este sorteo</p>`}
 
       <div class="modalidades">
@@ -121,6 +128,31 @@ function SorteoCard({ item, jugada }) {
         )}
         ${extra.paga ? html`<span class="mini mini-hit">Pozo Extra <b>${extra.aciertos}</b></span>` : null}
       </div>
+
+      <button
+        type="button"
+        class="btn-toggle"
+        aria-expanded=${abierto}
+        onClick=${() => setAbierto((v) => !v)}
+      >
+        ${abierto ? 'Ocultar detalle' : 'Ver las 4 modalidades'}
+      </button>
+
+      ${abierto
+        ? html`<div class="detalle">
+            ${modalidades.map(
+              (m) => html`<div class="modalidad-row">
+                <span class="modalidad-label">${m.label}</span>
+                <div class="nums">
+                  ${(sorteo[m.key] || []).map(
+                    (n) => html`<${NumeroChip} n=${n} jugada=${jugada} />`,
+                  )}
+                </div>
+                <span class=${'modalidad-aciertos' + (m.paga ? ' hit' : '')}>${m.aciertos}/6</span>
+              </div>`,
+            )}
+          </div>`
+        : null}
     </article>
   `;
 }
