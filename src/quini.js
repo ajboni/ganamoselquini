@@ -9,7 +9,7 @@ export const TIERS = {
   0: { nivel: 0, titulo: 'Sin premio', clase: 'tier-0' },
   1: { nivel: 1, titulo: '¡Algo te llevás!', clase: 'tier-1' },
   2: { nivel: 2, titulo: '¡Gran premio!', clase: 'tier-2' },
-  3: { nivel: 3, titulo: '¡GANAMOS EL KINI!', clase: 'tier-3' },
+  3: { nivel: 3, titulo: '¡GANAMOS EL QUINI!', clase: 'tier-3' },
 };
 
 export function contarAciertos(jugada, ganadores = []) {
