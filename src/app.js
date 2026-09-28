@@ -163,26 +163,29 @@ function App() {
 
   function setValor(i, raw) {
     const limpio = raw.replace(/\D/g, '').slice(0, 2);
-    const next = values.slice();
-    next[i] = limpio;
-    setValues(next);
+    setValues((prev) => {
+      const next = prev.slice();
+      next[i] = limpio;
+      return next;
+    });
     if (limpio.length === 2 && i < CANT - 1) inputs.current[i + 1]?.focus();
   }
 
   function onKeyDown(i, e) {
-    if (e.key === 'Backspace' && !values[i] && i > 0) inputs.current[i - 1]?.focus();
+    if (e.key === 'Backspace' && !e.target.value && i > 0) inputs.current[i - 1]?.focus();
     if (e.key === 'Enter') verificar(true);
   }
 
   function onBlur(i) {
-    const s = values[i];
-    if (!s) return;
-    const n = Number(s);
-    if (Number.isInteger(n) && n >= 0 && n <= MAX_NUM) {
-      const next = values.slice();
+    setValues((prev) => {
+      const s = prev[i];
+      if (!s) return prev;
+      const n = Number(s);
+      if (!Number.isInteger(n) || n < 0 || n > MAX_NUM) return prev;
+      const next = prev.slice();
       next[i] = String(n).padStart(2, '0');
-      setValues(next);
-    }
+      return next;
+    });
   }
 
   function verificar(manual = false) {
