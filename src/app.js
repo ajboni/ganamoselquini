@@ -215,7 +215,7 @@ function App() {
   return html`
     <main class="wrap">
       <header class="hero">
-        <h1>Ganamos el <span class="kini">Kini</span></h1>
+        <h1>Ganamos el <span class="quini">Quini</span></h1>
         <p class="tagline">Cargá tus 6 números y mirá si ganaste en los últimos 10 sorteos del Quini 6.</p>
       </header>
 

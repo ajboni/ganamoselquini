@@ -52,7 +52,7 @@ body {
   font-weight: 800;
 }
 
-.hero .kini {
+.hero .quini {
   background: linear-gradient(90deg, var(--accent), var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
