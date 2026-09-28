@@ -27,6 +27,15 @@ jobs:
       - name: Configurar Pages
         uses: actions/configure-pages@v5
 
+      - name: Versionar assets
+        run: |
+          set -e
+          V="${GITHUB_SHA}"
+          sed -i "s|\./src/app\.js|./src/app.js?v=${V}|; s|\./src/styles\.css|./src/styles.css?v=${V}|" index.html
+          grep -q "app.js?v=${V}" index.html
+          grep -q "styles.css?v=${V}" index.html
+          grep -nE "src/(app\.js|styles\.css)" index.html
+
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
         with:
